@@ -2,9 +2,11 @@
 
 namespace Kksigma\TMS;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Kksigma\TMS\Commands\TMSCommand;
+use Spatie\LaravelPackageTools\Package;
+use Kksigma\TMS\Commands\PullTranslationsCommand;
+use Kksigma\TMS\Commands\PushTranslationsCommand;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class TMSServiceProvider extends PackageServiceProvider
 {
@@ -21,5 +23,16 @@ class TMSServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasMigration('create_tms_table')
             ->hasCommand(TMSCommand::class);
+    }
+
+    public function boot()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                TMSCommand::class,
+                PushTranslationsCommand::class,
+                PullTranslationsCommand::class,
+            ]);
+        }
     }
 }
