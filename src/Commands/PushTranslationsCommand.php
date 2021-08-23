@@ -29,15 +29,6 @@ class PushTranslationsCommand extends Command
         $dir = resource_path('lang');
         $need_langs = explode(',', $this->argument('lang_dirs'));
 
-        // $en = file_get_contents( __DIR__ . '/en');
-        // $kk = json_decode($en, true);
-        // dd($kk);
-
-
-        // dd($kk);
-
-
-
         // support_lang_dirs => ['en', 'zh', ....];
         $support_lang_dirs = $this->file_system->directories($dir);
         $support_lang_dirs = array_map(function ($dir) {
@@ -54,9 +45,7 @@ class PushTranslationsCommand extends Command
             $this->loadDirectory($path, $lang);
         }
 
-        $text = '<?php return ' . var_export($this->translations, true) . ';';
-        file_put_contents(__DIR__ . 'translations.php', $text);
-        // $this->pushToTms();
+        $this->pushToTms();
         $this->comment('All done');
     }
 
@@ -80,8 +69,14 @@ class PushTranslationsCommand extends Command
     {
         // 去掉最后一个/
         $domain = substr($domain, 0, strrpos($domain, '/'));
+
         // module == file_name
         $module = $file->getFilenameWithoutExtension();
+
+        if (! $domain) {
+            $domain = $module == '通用' ? '后端通用' : '框架';
+        }
+
         $translations = Arr::dot($this->file_system->getRequire($file));
 
         foreach ($translations as $key => $value) {
@@ -91,6 +86,9 @@ class PushTranslationsCommand extends Command
 
     private function pushToTms()
     {
+        // $this->translations = include __DIR__ . '/lang.php';
+        // developer token EtGMNguKVSFf5TGZ9dFr3q7ZtG31TuI2OmGTTxLD
+        // test token GPfqhmu8vZHY1zNJ64nHokaRYT4ZnZs3f3OOpcWG
         $url = config('tms.url');
 
         $data = [

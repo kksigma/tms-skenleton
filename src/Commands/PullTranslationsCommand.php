@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class PullTranslationsCommand extends Command
 {
-    public $signature = 'tms:pull {token} {code?}';
+    public $signature = 'tms:pull {api_key} {code?}';
 
     public $description = 'pull translations from Tms';
 
@@ -59,7 +59,7 @@ class PullTranslationsCommand extends Command
         }
 
         $response = Http::retry(10, 300)
-            ->withToken($this->argument('token'))
+            ->withHeaders(['x-api-key' => $this->argument('api_key')])
             ->asJson()
             ->acceptJson()
             ->get($url, $data)
@@ -88,10 +88,15 @@ class PullTranslationsCommand extends Command
     {
         // 去掉最后一个/
         $domain = substr($domain, 0, strrpos($domain, '/'));
+
+        if (in_array($domain, ['后端通用', '框架'])) {
+            $domain = $domain == '后端通用' ? '通用' : '';
+        }
+
         $module = $file->getFilenameWithoutExtension();
         $file_translations = Arr::dot($this->file_system->getRequire($file));
-        $tms_translations = Arr::get($this->translations, $lang . '.' . $domain . '.' . $module);
-
+        $key = $domain ? $lang . '.' . $domain . '.' . $module : $lang . '.' . $module;
+        $tms_translations = Arr::get($this->translations, $key);
         $data = [];
 
         foreach ($file_translations as $key => $file_translation_value) {
