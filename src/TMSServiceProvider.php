@@ -2,10 +2,10 @@
 
 namespace Kksigma\TMS;
 
-use Kksigma\TMS\Commands\TMSCommand;
-use Spatie\LaravelPackageTools\Package;
 use Kksigma\TMS\Commands\PullTranslationsCommand;
 use Kksigma\TMS\Commands\PushTranslationsCommand;
+use Kksigma\TMS\Commands\TMSCommand;
+use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class TMSServiceProvider extends PackageServiceProvider

@@ -4,5 +4,4 @@ namespace Kksigma\TMS;
 
 class TMS
 {
-    
 }

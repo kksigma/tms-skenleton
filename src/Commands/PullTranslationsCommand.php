@@ -2,9 +2,9 @@
 
 namespace Kksigma\TMS\Commands;
 
-use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class PullTranslationsCommand extends Command
@@ -23,6 +23,7 @@ class PullTranslationsCommand extends Command
 
         if (! $this->translations) {
             $this->error('not data');
+
             return;
         }
 
@@ -37,7 +38,7 @@ class PullTranslationsCommand extends Command
         }, $support_langs);
 
         foreach ($langs as $lang) {
-            if (!in_array($lang, $support_langs)) {
+            if (! in_array($lang, $support_langs)) {
                 continue;
             }
 
@@ -70,7 +71,6 @@ class PullTranslationsCommand extends Command
 
     private function loadDirectory(string $path, string $lang, $domain = '')
     {
-
         $directories = $this->file_system->directories($path);
         // 只要还含有文件夹，循环此方法
         foreach ($directories as $directory) {

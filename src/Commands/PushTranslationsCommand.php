@@ -2,9 +2,9 @@
 
 namespace Kksigma\TMS\Commands;
 
-use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class PushTranslationsCommand extends Command
@@ -36,8 +36,9 @@ class PushTranslationsCommand extends Command
         }, $support_lang_dirs);
 
         foreach ($need_langs as $lang) {
-            if (!in_array($lang, $support_lang_dirs)) {
+            if (! in_array($lang, $support_lang_dirs)) {
                 $this->error('not support lang: ' . $lang);
+
                 continue;
             }
 
@@ -51,7 +52,6 @@ class PushTranslationsCommand extends Command
 
     private function loadDirectory(string $path, string $lang, $domain = '')
     {
-
         $directories = $this->file_system->directories($path);
         // 只要还含有文件夹，循环此方法
         foreach ($directories as $directory) {
