@@ -51,11 +51,11 @@ class PushTranslationsCommand extends Command
 
     private function loadDirectory(string $path, string $lang, $domain = '')
     {
-
         $directories = $this->file_system->directories($path);
         // 只要还含有文件夹，循环此方法
         foreach ($directories as $directory) {
             $dir_domain = $domain . basename($directory) . '/';
+
             $this->loadDirectory($directory, $lang, $dir_domain);
         }
 
@@ -70,13 +70,12 @@ class PushTranslationsCommand extends Command
         // 去掉最后一个/
         $domain = substr($domain, 0, strrpos($domain, '/'));
 
-        // module == file_name
-        $module = $file->getFilenameWithoutExtension();
-
-        if (! $domain) {
-            $domain = $module == '通用' ? '后端通用' : '框架';
+        if ($domain !== '接口') {
+            return;
         }
 
+        // module == file_name
+        $module = $file->getFilenameWithoutExtension();
         $translations = Arr::dot($this->file_system->getRequire($file));
 
         foreach ($translations as $key => $value) {
@@ -90,7 +89,6 @@ class PushTranslationsCommand extends Command
         // developer token EtGMNguKVSFf5TGZ9dFr3q7ZtG31TuI2OmGTTxLD
         // test token GPfqhmu8vZHY1zNJ64nHokaRYT4ZnZs3f3OOpcWG
         $url = config('tms.url');
-
         $data = [
             'translations' => $this->translations,
             'project_name' => config('tms.project_name'),
