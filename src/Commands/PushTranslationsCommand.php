@@ -76,11 +76,8 @@ class PushTranslationsCommand extends Command
 
         // module == file_name
         $module = $file->getFilenameWithoutExtension();
-        $translations = Arr::dot($this->file_system->getRequire($file));
-
-        foreach ($translations as $key => $value) {
-            $this->translations[$lang][$domain][$module][$key] = $value;
-        }
+        $translations = $this->file_system->getRequire($file);
+        $this->translations[$lang][$domain][$module] = $translations;
     }
 
     private function pushToTms()
