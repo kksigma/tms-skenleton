@@ -106,6 +106,6 @@ class PullTranslationsCommand extends Command
         }
         $content = '<?php' . PHP_EOL . 'return ' . var_export($data, true) . ';';
 
-        $this->file_system->replace($file->getPathname(), $content);
+        file_put_contents($file->getPathname(), $content);
     }
 }
