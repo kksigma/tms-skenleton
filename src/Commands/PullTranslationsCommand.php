@@ -107,5 +107,7 @@ class PullTranslationsCommand extends Command
         $content = '<?php' . PHP_EOL . 'return ' . var_export($data, true) . ';';
 
         file_put_contents($file->getPathname(), $content);
+
+        opcache_reset();
     }
 }
