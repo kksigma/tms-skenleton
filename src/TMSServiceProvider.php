@@ -3,6 +3,7 @@
 namespace Kksigma\TMS;
 
 use Kksigma\TMS\Commands\TMSCommand;
+use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Kksigma\TMS\Commands\PullTranslationsCommand;
 use Kksigma\TMS\Commands\PushTranslationsCommand;
@@ -34,5 +35,10 @@ class TMSServiceProvider extends PackageServiceProvider
                 PullTranslationsCommand::class,
             ]);
         }
+
+        Route::group([
+        ], function ($router): void {
+            require __DIR__ . '/routes/web.php';
+        });
     }
 }

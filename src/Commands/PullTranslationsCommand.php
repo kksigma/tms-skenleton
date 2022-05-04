@@ -108,6 +108,8 @@ class PullTranslationsCommand extends Command
 
         file_put_contents($file->getPathname(), $content);
 
-        opcache_reset();
+        if ($app_url = env('APP_URL')) {
+            Http::get($app_url . '/opcache_reset');
+        }
     }
 }
