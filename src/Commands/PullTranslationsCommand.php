@@ -45,7 +45,7 @@ class PullTranslationsCommand extends Command
             $this->loadDirectory($path, $lang);
         }
 
-        if ($app_url = env('APP_URL')) {
+        if ($app_url = config('app.url')) {
             $res = Http::get($app_url . '/opcache_reset');
             $this->comment('opcache_reset ' . $res);
         }
